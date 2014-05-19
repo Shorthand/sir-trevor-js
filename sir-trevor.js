@@ -296,7 +296,7 @@
     }
   };
   
-  if (window.i18n === undefined) {
+  if (window.i18n === undefined || window.i18n.init === undefined) {
     // Minimal i18n stub that only reads the English strings
     SirTrevor.log("Using i18n stub");
     window.i18n = {
@@ -801,11 +801,11 @@
       this._queued = [];
     },
   
-    addQueuedItem: function(name, deffered) {
+    addQueuedItem: function(name, deferred) {
       SirTrevor.log("Adding queued item for " + this.blockID + " called " + name);
       SirTrevor.EventBus.trigger("onUploadStart", this.blockID);
   
-      this._queued.push({ name: name, deffered: deffered });
+      this._queued.push({ name: name, deferred: deferred });
     },
   
     removeQueuedItem: function(name) {
@@ -822,7 +822,7 @@
     resolveAllInQueue: function() {
       _.each(this._queued, function(item){
         SirTrevor.log("Aborting queued request: " + item.name);
-        item.deffered.abort();
+        item.deferred.abort();
       }, this);
     }
   
@@ -1740,13 +1740,13 @@
       },
   
       getSelectionForFormatter: function() {
-        _.defer(function(){
+        _.defer(function(block){
           var selection = window.getSelection(),
              selectionStr = selection.toString().trim(),
              eventType = (selectionStr === '') ? 'hide' : 'position';
   
-          SirTrevor.EventBus.trigger('formatter:' + eventType , this);
-        });
+          SirTrevor.EventBus.trigger('formatter:' + eventType, block);
+        }, this);
        },
   
       clearInsertedStyles: function(e) {
