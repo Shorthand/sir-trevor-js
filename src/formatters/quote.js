@@ -7,7 +7,6 @@
     keyCode: 49,
     text: '“',
 
-
     onClick: function() {
       var selection = document.getSelection();
       if (selection.type !== 'Range' || selection.rangeCount === 0) {
