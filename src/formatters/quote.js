@@ -5,7 +5,7 @@
 
     title: 'quote',
     keyCode: 49,
-    text: '”',
+    text: '“',
 
 
     onClick: function() {
