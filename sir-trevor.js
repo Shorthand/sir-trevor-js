@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-05-19
+ * 2014-05-20
  */
 
 (function ($, _){
@@ -1860,7 +1860,7 @@
   
     return SirTrevor.Block.extend({
   
-      type: "quote",
+      type: 'Quote',
   
       title: function(){ return i18n.t('blocks:quote:title'); },
   
@@ -2352,8 +2352,7 @@
   
       title: 'quote',
       keyCode: 49,
-      text: '”',
-  
+      text: '“',
   
       onClick: function() {
         var selection = document.getSelection();
