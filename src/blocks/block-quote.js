@@ -13,7 +13,7 @@ SirTrevor.Blocks.Quote = (function(){
 
   return SirTrevor.Block.extend({
 
-    type: "quote",
+    type: 'Quote',
 
     title: function(){ return i18n.t('blocks:quote:title'); },
 
