@@ -9,9 +9,9 @@
       var textForNewBlock = '';
       if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
           textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
-      } else if (textFromPreviousBlock.length == 0 && textFromNewlyCreatedTextBlock.length > 0) {
+      } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
           textForNewBlock = textFromNewlyCreatedTextBlock;
-      } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length == 0) {
+      } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
           textForNewBlock = textFromPreviousBlock;
       }
 
@@ -29,10 +29,10 @@
     merge: function(range, block, blockInner, editor) {
       var blockPosition = editor.getBlockPosition(block);
 
-      //create a text block from the contents of the exisiting header block
+      //create a text block from the contents of the exisiting quote block
       this.addTextBlock(blockInner.innerText, blockPosition, editor);
 
-      // remove the old header block
+      // remove the old quote block
       editor.removeBlock(block.id);
 
       var totalNumberOfBlocks = editor.blocks.length;
@@ -60,11 +60,11 @@
       }
     },
 
-    consecutiveHeadingBlockCheck: function(editor) {
+    consecutiveQuoteBlockCheck: function(editor) {
       var totalNumberOfBlocks = editor.blocks.length;
       var lastButOneBlock = this.getBlockFromPosition(editor, totalNumberOfBlocks - 1);
       var lastBlock = this.getBlockFromPosition(editor, totalNumberOfBlocks - 2);
-      if (this.isHeadingBlock(lastButOneBlock) && this.isHeadingBlock(lastBlock)) {
+      if (this.isQuoteBlock(lastButOneBlock) && this.isQuoteBlock(lastBlock)) {
         this.addTextBlock("", totalNumberOfBlocks - 1, editor);
       }
     },
@@ -73,13 +73,13 @@
       var position = editor.getBlockPosition(block) + 1;
       var paragraphsBeforeSelection = this.getParagraphsBeforeSelection(range, blockInner);
       var paragraphsAfterSelection = this.getParagraphsAfterSelection(range, blockInner);
-      var newHeadings = this.getSelectedParagraphs(range, blockInner);
+      var newQuotes = this.getSelectedParagraphs(range, blockInner);
 
       // Remove the quotes and paragraphs after from the current text block
-      this.removeParagraphs([].concat(paragraphsAfterSelection, newHeadings));
+      this.removeParagraphs([].concat(paragraphsAfterSelection, newQuotes));
 
       // Add a new quote block for each paragraph that was selected
-      position = this.addQuoteBlocks(newHeadings, position, editor);
+      position = this.addQuoteBlocks(newQuotes, position, editor);
 
       // Move text after the selection into a new text block,
       // after the quote block(s) we just created
@@ -94,7 +94,7 @@
         editor.removeBlock(block.id);
       }
 
-      this.consecutiveHeadingBlockCheck(editor);
+      this.consecutiveQuoteBlockCheck(editor);
     }
   });
 

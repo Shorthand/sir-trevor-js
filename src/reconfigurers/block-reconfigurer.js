@@ -26,6 +26,10 @@ SirTrevor.BlockReconfigurer = (function() {
       return block.data().type === SirTrevor.Blocks.Heading.prototype.type;
     },
 
+    isQuoteBlock: function(block) {
+      return block.data().type === SirTrevor.Blocks.Quote.prototype.type;
+    },
+
     getBlockFromPosition: function(editor, position) {
       return editor.$wrapper.find('.st-block').eq(position);
     },
