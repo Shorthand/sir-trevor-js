@@ -124,5 +124,31 @@ describe('Formatters.Heading', function() {
         expect(BlockUtils.getBlockTextFromPosition(this.editor, 2)).toBe('Third Paragraph');
       });
     });
+
+    describe("Selecting the 3rd paragraph, out of three contained in a single text block, followed by the 1st paragraph", function() {
+
+      beforeEach(function() {
+        this.editor.createBlock('text', { text: 'Soon to be Header 1!\n\nSecond paragraph - always text!\n\nSoon to be Header 2!' }, 0);
+      });
+
+      it('should create a heading block followed by a text block, then a heading block', function() {
+        BlockUtils.setSelection(this.editor, 0, 4);
+        Heading.onClick();
+        expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
+        expect(BlockUtils.getBlockType(this.editor, 1)).toBe('Heading');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('Soon to be Header 1!\n\nSecond paragraph - always text!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 1)).toBe('Soon to be Header 2!');
+
+        BlockUtils.setSelection(this.editor, 0, 0);
+        Heading.onClick();
+
+        expect(BlockUtils.getBlockType(this.editor, 0)).toBe('Heading');
+        expect(BlockUtils.getBlockType(this.editor, 1)).toBe('text');
+        expect(BlockUtils.getBlockType(this.editor, 2)).toBe('Heading');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('Soon to be Header 1!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 1)).toBe('Second paragraph - always text!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 2)).toBe('Soon to be Header 2!');
+      });
+    });
   });
 });

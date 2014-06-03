@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-05-21
+ * 2014-06-03
  */
 
 (function ($, _){
@@ -2468,11 +2468,11 @@
       },
   
       addHeadingBlocks: function(paragraphs, addAt, editor) {
-        this._addBlocks(paragraphs, addAt, editor, 'Heading');
+        return this._addBlocks(paragraphs, addAt, editor, 'Heading');
       },
   
       addQuoteBlocks: function(paragraphs, addAt, editor) {
-        this._addBlocks(paragraphs, addAt, editor, 'Quote');
+        return this._addBlocks(paragraphs, addAt, editor, 'Quote');
       },
   
       /**
