@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                      'bower_components/sinonjs/sinon.js',
                      'bower_components/jasmine-sinon/lib/jasmine-sinon.js'],
           junit : {
-            path : './jasmine-test-reports',
+            path : './jasmine-tests-results/test-reports/',
             consolidate : true
           }
         }
