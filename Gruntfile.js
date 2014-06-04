@@ -31,7 +31,11 @@ module.exports = function(grunt) {
           specs : 'spec/javascripts/**/*.spec.js',
           helpers : ['spec/javascripts/helpers/*.js',
                      'bower_components/sinonjs/sinon.js',
-                     'bower_components/jasmine-sinon/lib/jasmine-sinon.js']
+                     'bower_components/jasmine-sinon/lib/jasmine-sinon.js'],
+          junit : {
+            path : './jasmine-test-reports',
+            consolidate : true
+          }
         }
       }
     },
