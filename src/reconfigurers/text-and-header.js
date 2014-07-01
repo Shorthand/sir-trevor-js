@@ -9,9 +9,9 @@
       var textForNewBlock = '';
       if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
           textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
-      } else if (textFromPreviousBlock.length == 0 && textFromNewlyCreatedTextBlock.length > 0) {
+      } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
           textForNewBlock = textFromNewlyCreatedTextBlock;
-      } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length == 0) {
+      } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
           textForNewBlock = textFromPreviousBlock;
       }
 
