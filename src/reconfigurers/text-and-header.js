@@ -29,6 +29,7 @@
     merge: function(range, block, blockInner, editor) {
       var blockPosition = editor.getBlockPosition(block);
 
+      $(blockInner).find('[contenteditable=false]').remove();
       //create a text block from the contents of the exisiting header block
       this.addTextBlock(blockInner.innerText, blockPosition, editor);
 
