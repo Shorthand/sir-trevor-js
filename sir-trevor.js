@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-06-03
+ * 2014-07-01
  */
 
 (function ($, _){
@@ -2593,9 +2593,9 @@
         var textForNewBlock = '';
         if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
             textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
-        } else if (textFromPreviousBlock.length == 0 && textFromNewlyCreatedTextBlock.length > 0) {
+        } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
             textForNewBlock = textFromNewlyCreatedTextBlock;
-        } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length == 0) {
+        } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
             textForNewBlock = textFromPreviousBlock;
         }
   
@@ -2613,6 +2613,7 @@
       merge: function(range, block, blockInner, editor) {
         var blockPosition = editor.getBlockPosition(block);
   
+        $(blockInner).find('[contenteditable=false]').remove();
         //create a text block from the contents of the exisiting header block
         this.addTextBlock(blockInner.innerText, blockPosition, editor);
   
@@ -2719,6 +2720,7 @@
       merge: function(range, block, blockInner, editor) {
         var blockPosition = editor.getBlockPosition(block);
   
+        $(blockInner).find('[contenteditable=false]').remove();
         //create a text block from the contents of the exisiting quote block
         this.addTextBlock(blockInner.innerText, blockPosition, editor);
   
