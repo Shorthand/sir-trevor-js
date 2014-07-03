@@ -243,8 +243,10 @@ SirTrevor.Block = (function(){
     },
 
     onContentPasted: function(event, target){
+      this.$el.find('[contenteditable=false]').remove();
       target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
       this.getTextBlock().caretToEnd();
+      this.$el.trigger('keyup');
     },
 
     beforeLoadingData: function() {
