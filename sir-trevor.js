@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-07-01
+ * 2014-07-04
  */
 
 (function ($, _){
@@ -1667,8 +1667,10 @@
       },
   
       onContentPasted: function(event, target){
+        this.$el.find('[contenteditable=false]').remove();
         target.html(this.pastedMarkdownToHTML(target[0].innerHTML));
         this.getTextBlock().caretToEnd();
+        this.$el.trigger('keyup');
       },
   
       beforeLoadingData: function() {
