@@ -9,3 +9,5 @@ _SpecRunner.html
 build
 components
 /bower_components/
+
+/jasmine-tests-results/
