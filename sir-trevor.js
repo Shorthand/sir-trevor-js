@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-07-15
+ * 2014-08-06
  */
 
 (function ($, _){
@@ -2589,6 +2589,9 @@
     var TextAndHeader = SirTrevor.BlockReconfigurer.extend({
   
       _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
+        // Remove non-editable content before copying
+        firstBlock.find('[contenteditable=false]').remove();
+        secondBlock.find('[contenteditable=false]').remove();
         var textFromPreviousBlock = this.convertParagraphsToText(firstBlock.find('.st-text-block').children());
         var textFromNewlyCreatedTextBlock = this.convertParagraphsToText(secondBlock.find('.st-text-block').children());
   
@@ -2615,6 +2618,7 @@
       merge: function(range, block, blockInner, editor) {
         var blockPosition = editor.getBlockPosition(block);
   
+        // Remove non-editable content before copying
         $(blockInner).find('[contenteditable=false]').remove();
         //create a text block from the contents of the exisiting header block
         this.addTextBlock(blockInner.innerText, blockPosition, editor);
@@ -2662,6 +2666,9 @@
         var paragraphsAfterSelection = this.getParagraphsAfterSelection(range, blockInner);
         var newHeadings = this.getSelectedParagraphs(range, blockInner);
   
+        // Remove non-editable content before copying
+        $('[contenteditable=false]', paragraphsAfterSelection).remove();
+  
         // Remove the headings and paragraphs after from the current text block
         this.removeParagraphs([].concat(paragraphsAfterSelection, newHeadings));
   
@@ -2696,6 +2703,9 @@
     var TextAndQuote = SirTrevor.BlockReconfigurer.extend({
   
       _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
+        // Remove non-editable content before copying
+        firstBlock.find('[contenteditable=false]').remove();
+        secondBlock.find('[contenteditable=false]').remove();
         var textFromPreviousBlock = this.convertParagraphsToText(firstBlock.find('.st-text-block').children());
         var textFromNewlyCreatedTextBlock = this.convertParagraphsToText(secondBlock.find('.st-text-block').children());
   
@@ -2722,6 +2732,7 @@
       merge: function(range, block, blockInner, editor) {
         var blockPosition = editor.getBlockPosition(block);
   
+        // Remove non-editable content before copying
         $(blockInner).find('[contenteditable=false]').remove();
         //create a text block from the contents of the exisiting quote block
         this.addTextBlock(blockInner.innerText, blockPosition, editor);
@@ -2768,6 +2779,9 @@
         var paragraphsBeforeSelection = this.getParagraphsBeforeSelection(range, blockInner);
         var paragraphsAfterSelection = this.getParagraphsAfterSelection(range, blockInner);
         var newQuotes = this.getSelectedParagraphs(range, blockInner);
+  
+        // Remove non-editable content before copying
+        $('[contenteditable=false]', paragraphsAfterSelection).remove();
   
         // Remove the quotes and paragraphs after from the current text block
         this.removeParagraphs([].concat(paragraphsAfterSelection, newQuotes));
