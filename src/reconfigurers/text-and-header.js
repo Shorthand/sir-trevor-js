@@ -101,8 +101,8 @@
       if (this.isOnlyWhitespaceParagraphs(paragraphsBeforeSelection)) {
         editor.removeBlock(block.id);
       }
-
-      this.consecutiveHeadingBlockCheck(editor);
+      this.ensureNoConsecutiveStyledBlocks(editor);
+      this.ensureLastBlockIsText(editor);
     }
   });
 

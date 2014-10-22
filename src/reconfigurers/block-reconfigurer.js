@@ -30,6 +30,10 @@ SirTrevor.BlockReconfigurer = (function() {
       return block.data().type === SirTrevor.Blocks.Quote.prototype.type;
     },
 
+    isStyledBlock: function(block) {
+      return this.isQuoteBlock(block) || this.isHeadingBlock(block);
+    },
+
     getBlockFromPosition: function(editor, position) {
       return editor.$wrapper.find('.st-block').eq(position);
     },
@@ -158,6 +162,30 @@ SirTrevor.BlockReconfigurer = (function() {
         block = block.parentNode;
       }
       return block;
+    },
+
+    ensureLastBlockIsText: function(editor) {
+      var totalNumberOfBlocks = editor.blocks.length;
+      if (totalNumberOfBlocks > 0) {
+        var lastBlock = this.getBlockFromPosition(editor, totalNumberOfBlocks - 1);
+        if (this.isStyledBlock(lastBlock)) {
+          this.addTextBlock("", totalNumberOfBlocks, editor);
+        }
+      }
+    },
+
+    ensureNoConsecutiveStyledBlocks: function(editor) {
+      var totalNumberOfBlocks = editor.blocks.length;
+      var currentBlockPosition = 0;
+      while (currentBlockPosition < (totalNumberOfBlocks - 1)) {
+        var block = this.getBlockFromPosition(editor, currentBlockPosition);
+        var nextBlock = this.getBlockFromPosition(editor, currentBlockPosition + 1);
+        if (this.isStyledBlock(block) && this.isStyledBlock(nextBlock)) {
+          this.addTextBlock("", currentBlockPosition + 1, editor);
+          totalNumberOfBlocks = editor.blocks.length;
+        }
+        currentBlockPosition++;
+      }
     }
 
   });

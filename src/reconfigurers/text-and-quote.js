@@ -102,7 +102,8 @@
         editor.removeBlock(block.id);
       }
 
-      this.consecutiveQuoteBlockCheck(editor);
+      this.ensureNoConsecutiveStyledBlocks(editor);
+      this.ensureLastBlockIsText(editor);
     }
   });
 
