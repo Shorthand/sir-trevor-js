@@ -129,6 +129,15 @@ SirTrevor.BlockReconfigurer = (function() {
       return this._getParagraphsRelativeToRange(range, this.TEXT_BEFORE, blockInner);
     },
 
+    getWholeParagraphsBeforeSelection: function(range, blockInner) {
+      var text = Array.prototype.filter.call(blockInner.children, function(child) {
+        var childRange = document.createRange();
+        childRange.selectNode(child)
+        return range.compareBoundaryPoints(Range.END_TO_START, childRange) === 1;
+      }.bind(this));
+      return text;
+    },
+
     /**
      * Position integer:
      *  1 - After

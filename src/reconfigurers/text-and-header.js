@@ -65,40 +65,33 @@
       }
     },
 
-    consecutiveHeadingBlockCheck: function(editor) {
-      var totalNumberOfBlocks = editor.blocks.length;
-      var lastButOneBlock = this.getBlockFromPosition(editor, totalNumberOfBlocks - 1);
-      var lastBlock = this.getBlockFromPosition(editor, totalNumberOfBlocks - 2);
-      if (this.isHeadingBlock(lastButOneBlock) && this.isHeadingBlock(lastBlock)) {
-        this.addTextBlock("", totalNumberOfBlocks - 1, editor);
-      }
-    },
-
     split: function(range, block, blockInner, editor) {
-      var position = editor.getBlockPosition(block) + 1;
-      var paragraphsBeforeSelection = this.getParagraphsBeforeSelection(range, blockInner);
+      var position = editor.getBlockPosition(block);
       var paragraphsAfterSelection = this.getParagraphsAfterSelection(range, blockInner);
-      var newHeadings = this.getSelectedParagraphs(range, blockInner);
+      var selectedParagraphs = this.getSelectedParagraphs(range, blockInner);
+      var paragraphsBeforeSelection = this.getWholeParagraphsBeforeSelection(range, blockInner);
 
       // Remove non-editable content before copying
       $('[contenteditable=false]', paragraphsAfterSelection).remove();
 
       // Remove the headings and paragraphs after from the current text block
-      this.removeParagraphs([].concat(paragraphsAfterSelection, newHeadings));
+      this.removeParagraphs([].concat(paragraphsAfterSelection, selectedParagraphs));
 
-      // Add a new heading block for each paragraph that was selected
-      position = this.addHeadingBlocks(newHeadings, position, editor);
-
-      // Move text after the selection into a new text block,
-      // after the heading block(s) we just created
-      var totalNumberOfBlocks = editor.blocks.length;
-      var textAfter = this.convertParagraphsToText(paragraphsAfterSelection);
-      if (textAfter || ((position) === totalNumberOfBlocks)) {
-        this.addTextBlock(textAfter, position, editor);
+      // if paragraphs exist before this new styled block that is going to be added then insert after this paragraph
+      if (paragraphsBeforeSelection.length !== 0){
+        position++;
       }
+      // Add a new heading block for each paragraph that was selected
+      position = this.addHeadingBlocks(selectedParagraphs, position, editor);
 
-      // Delete current block if it's now empty
-      if (this.isOnlyWhitespaceParagraphs(paragraphsBeforeSelection)) {
+      if (paragraphsAfterSelection.length !== 0) {
+        var textAfter = this.convertParagraphsToText(paragraphsAfterSelection);
+        if (textAfter) {
+          this.addTextBlock(textAfter, position, editor);
+        }
+      }
+      // Delete original block if it's now empty
+      if (this.isOnlyWhitespaceParagraphs(blockInner.children)) {
         editor.removeBlock(block.id);
       }
       this.ensureNoConsecutiveStyledBlocks(editor);
