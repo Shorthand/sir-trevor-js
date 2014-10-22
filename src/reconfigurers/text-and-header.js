@@ -11,11 +11,11 @@
 
       var textForNewBlock = '';
       if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
+        textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
       } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromNewlyCreatedTextBlock;
+        textForNewBlock = textFromNewlyCreatedTextBlock;
       } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
-          textForNewBlock = textFromPreviousBlock;
+        textForNewBlock = textFromPreviousBlock;
       }
 
       this.addTextBlock(textForNewBlock, blockPositionToInsert, editor);
