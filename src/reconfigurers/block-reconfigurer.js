@@ -78,7 +78,7 @@ SirTrevor.BlockReconfigurer = (function() {
 
     isOnlyWhitespaceParagraphs: function(paragraphs) {
       return _.every(paragraphs, function(p) {
-        return p.innerHTML.match(this.WHITESPACE_AND_BR) === null;
+        return p.innerHTML.match(this.WHITESPACE_AND_BR) !== null;
       }, this);
     },
 

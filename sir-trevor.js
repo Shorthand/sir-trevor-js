@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-08-06
+ * 2014-10-22
  */
 
 (function ($, _){
@@ -2495,7 +2495,7 @@
   
       isOnlyWhitespaceParagraphs: function(paragraphs) {
         return _.every(paragraphs, function(p) {
-          return p.innerHTML.match(this.WHITESPACE_AND_BR) === null;
+          return p.innerHTML.match(this.WHITESPACE_AND_BR) !== null;
         }, this);
       },
   
