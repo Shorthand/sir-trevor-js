@@ -15,8 +15,7 @@ describe('Formatters.Heading', function() {
       this.editor.destroy();
     });
 
-    //skipped due to problem with comparePoint not working in phantomjs
-    xdescribe("Selecting a single (only) paragraph, from the only text block", function() {
+    describe("Selecting a single (only) paragraph, from the only text block", function() {
 
       beforeEach(function() {
         this.editor.createBlock('text', { text: 'This is a text section!' }, 0);
@@ -33,8 +32,7 @@ describe('Formatters.Heading', function() {
       });
     });
 
-    //skipped due to problem with comparePoint not working in phantomjs
-    xdescribe("Selecting the first paragraph, from the two paragraphs, from this solitary text block", function() {
+    describe("Selecting the first paragraph, from the two paragraphs, from this solitary text block", function() {
 
       beforeEach(function() {
         this.editor.createBlock('text', { text: 'This is the first section that will become a heading block!\n\nThis section will become the second (text) block' }, 0);
@@ -51,8 +49,7 @@ describe('Formatters.Heading', function() {
       });
     });
 
-    //skipped due to problem with comparePoint not working in phantomjs
-    xdescribe("Selecting a single paragraph, from the first text block, out of two", function() {
+    describe("Selecting a single paragraph, from the first text block, out of two", function() {
 
       beforeEach(function() {
         this.editor.createBlock('text', { text: 'This was a text section!' }, 0);
@@ -70,8 +67,7 @@ describe('Formatters.Heading', function() {
       });
     });
 
-    //skipped due to problem with comparePoint not working in phantomjs
-    xdescribe("Selecting the single paragraph, from the first text block, followed by a header block", function() {
+    describe("Selecting the single paragraph, from the first text block, followed by a header block", function() {
 
       beforeEach(function() {
         this.editor.createBlock('text', { text: 'This was a text section!' }, 0);
@@ -81,7 +77,7 @@ describe('Formatters.Heading', function() {
       });
 
       it('should have a header block followed by an injected empty text block and then the existing heading block', function() {
-        expect(this.editor.blocks.length).toBe(3);
+        expect(this.editor.blocks.length).toBe(4);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('Heading');
         expect(BlockUtils.getBlockType(this.editor, 1)).toBe('text');
         expect(BlockUtils.getBlockType(this.editor, 2)).toBe('Heading');
@@ -91,8 +87,7 @@ describe('Formatters.Heading', function() {
       });
     });
 
-    //skipped due to problem with comparePoint not working in phantomjs
-    xdescribe("Selecting across multiple (all) paragraphs, from a single text block", function() {
+    describe("Selecting across multiple (all) paragraphs, from a single text block", function() {
 
       beforeEach(function() {
         this.editor.createBlock('text', { text: 'This is a text section!\n\nSecond paragraph' }, 0);
@@ -101,13 +96,34 @@ describe('Formatters.Heading', function() {
       });
 
       it('should have two header blocks followed by an empty text block', function() {
-        expect(this.editor.blocks.length).toBe(3);
+        expect(this.editor.blocks.length).toBe(4);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('Heading');
+        expect(BlockUtils.getBlockType(this.editor, 1)).toBe('text');
+        expect(BlockUtils.getBlockType(this.editor, 2)).toBe('Heading');
+        expect(BlockUtils.getBlockType(this.editor, 3)).toBe('text');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('This is a text section!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 1)).toBe('');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 2)).toBe('Second paragraph');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 3)).toBe('');
+      });
+    });
+
+    describe("Selecting the second paragraph (containing italics), out of three contained in a single text block", function() {
+
+      beforeEach(function() {
+        this.editor.createBlock('text', { text: 'This is a text section!\n\nSecond <i>para</i>graph\n\nThird Paragraph' }, 0);
+        BlockUtils.setSelection(this.editor, 0, 2);
+        Heading.onClick();
+      });
+
+      it('should create a text block followed by a header followed by a text block', function() {
+        expect(this.editor.blocks.length).toBe(3);
+        expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
         expect(BlockUtils.getBlockType(this.editor, 1)).toBe('Heading');
         expect(BlockUtils.getBlockType(this.editor, 2)).toBe('text');
         expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('This is a text section!');
         expect(BlockUtils.getBlockTextFromPosition(this.editor, 1)).toBe('Second paragraph');
-        expect(BlockUtils.getBlockTextFromPosition(this.editor, 2)).toBe('');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 2)).toBe('Third Paragraph');
       });
     });
 
@@ -149,8 +165,7 @@ describe('Formatters.Heading', function() {
       });
     });
 
-    //skipped due to problem with comparePoint not working in phantomjs
-    xdescribe("Selecting the 3rd paragraph, out of three contained in a single text block, followed by the 1st paragraph", function() {
+    describe("Selecting the 3rd paragraph, out of three contained in a single text block, followed by the 1st paragraph", function() {
 
       beforeEach(function() {
         this.editor.createBlock('text', { text: 'Soon to be Header 1!\n\nSecond paragraph - always text!\n\nSoon to be Header 2!' }, 0);
