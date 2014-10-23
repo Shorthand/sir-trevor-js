@@ -73,7 +73,7 @@
 
       // Remove non-editable content before copying
       $('[contenteditable=false]', paragraphsAfterSelection).remove();
-      $('[contenteditable=false]', selectedParagraphs).remove();
+      $('[contenteditable=false]', newQuotes).remove();
 
       // Remove the quotes and paragraphs after from the current text block
       this.removeParagraphs([].concat(paragraphsAfterSelection, newQuotes));
