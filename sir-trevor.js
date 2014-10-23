@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-22
+ * 2014-10-23
  */
 
 (function ($, _){
@@ -2575,8 +2575,11 @@
        * or HTML elements
        */
       _getRangeContainerElement: function(container) {
-        if (container.nodeName === '#text') {
-          return container.parentNode;
+        if (container.nodeName !== 'DIV') {
+          if (container.parentNode.nodeName !== 'DIV') {
+            return this._getRangeContainerElement(container.parentNode)
+          }
+          container = container.parentNode;
         }
   
         return container;
