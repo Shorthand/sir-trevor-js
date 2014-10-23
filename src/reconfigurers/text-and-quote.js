@@ -103,6 +103,7 @@
       this.ensureNoConsecutiveStyledBlocks(editor);
       this.ensureLastBlockIsText(editor);
     }
+
   });
 
   /*
