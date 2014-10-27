@@ -35,7 +35,7 @@
       // Remove non-editable content before copying
       $(blockInner).find('[contenteditable=false]').remove();
       //create a text block from the contents of the exisiting quote block
-      this.addTextBlock(blockInner.innerText, blockPosition, editor);
+      this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
 
       // remove the old quote block
       editor.removeBlock(block.id);

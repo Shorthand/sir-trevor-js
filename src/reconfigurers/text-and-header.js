@@ -35,7 +35,7 @@
       // Remove non-editable content before copying
       $(blockInner).find('[contenteditable=false]').remove();
       //create a text block from the contents of the exisiting header block
-      this.addTextBlock(blockInner.innerText, blockPosition, editor);
+      this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
 
       // remove the old header block
       editor.removeBlock(block.id);
