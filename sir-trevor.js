@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-23
+ * 2014-10-29
  */
 
 (function ($, _){
@@ -2661,7 +2661,7 @@
         // Remove non-editable content before copying
         $(blockInner).find('[contenteditable=false]').remove();
         //create a text block from the contents of the exisiting header block
-        this.addTextBlock(blockInner.innerText, blockPosition, editor);
+        this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
   
         // remove the old header block
         editor.removeBlock(block.id);
@@ -2769,7 +2769,7 @@
         // Remove non-editable content before copying
         $(blockInner).find('[contenteditable=false]').remove();
         //create a text block from the contents of the exisiting quote block
-        this.addTextBlock(blockInner.innerText, blockPosition, editor);
+        this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
   
         // remove the old quote block
         editor.removeBlock(block.id);
