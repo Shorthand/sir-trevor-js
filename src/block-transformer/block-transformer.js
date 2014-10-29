@@ -1,10 +1,10 @@
-SirTrevor.BlockReconfigurer = (function() {
+SirTrevor.BlockTransformer = (function() {
 
-  var Reconfigurer = function(options) {
+  var BlockTransformer = function(options) {
     this.initialize.apply(this, arguments);
   };
 
-  _.extend(Reconfigurer.prototype, {
+  _.extend(BlockTransformer.prototype, {
 
     WHITESPACE_AND_BR: new RegExp('^(?:\s*<br\s*/?>)*\s*$', 'gim'),
 
@@ -15,19 +15,18 @@ SirTrevor.BlockReconfigurer = (function() {
     TEXT_BEFORE: -1,
     TEXT_AFTER: 1,
 
-    initialize: function() {
-    },
+    initialize: function() {},
 
     isTextBlock: function(block) {
-      return block.data().type === SirTrevor.Blocks.Text.prototype.type;
+      return block.data('type') === SirTrevor.Blocks.Text.prototype.type;
     },
 
     isHeadingBlock: function(block) {
-      return block.data().type === SirTrevor.Blocks.Heading.prototype.type;
+      return block.data('type') === SirTrevor.Blocks.Heading.prototype.type;
     },
 
     isQuoteBlock: function(block) {
-      return block.data().type === SirTrevor.Blocks.Quote.prototype.type;
+      return block.data('type') === SirTrevor.Blocks.Quote.prototype.type;
     },
 
     isStyledBlock: function(block) {
@@ -202,8 +201,8 @@ SirTrevor.BlockReconfigurer = (function() {
 
   });
 
-  Reconfigurer.extend = extend; // Allow our reconfigurer to be extended.
+  BlockTransformer.extend = extend; // Allow our reconfigurer to be extended.
 
-  return Reconfigurer;
+  return BlockTransformer;
 
 })();

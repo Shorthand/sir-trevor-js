@@ -1,6 +1,6 @@
 (function(SirTrevor) {
 
-  var TextAndHeader = SirTrevor.BlockReconfigurer.extend({
+  var TextAndHeader = SirTrevor.BlockTransformer.extend({
 
     _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
       // Remove non-editable content before copying

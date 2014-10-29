@@ -1,6 +1,6 @@
 (function(SirTrevor) {
 
-  var TextAndQuote = SirTrevor.BlockReconfigurer.extend({
+  var TextAndQuote = SirTrevor.BlockTransformer.extend({
 
     _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
       // Remove non-editable content before copying
@@ -34,7 +34,7 @@
 
       // Remove non-editable content before copying
       $(blockInner).find('[contenteditable=false]').remove();
-      //create a text block from the contents of the exisiting quote block
+      // Create a text block from the contents of the existing quote block
       this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
 
       // remove the old quote block

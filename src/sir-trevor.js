@@ -131,8 +131,8 @@
   //= blocks
   /* Default Formatters */
   //= formatters
-  // /* Default Reconfigurers */
-  //= reconfigurers
+  /* Default BlockTransformers */
+  //= block-transformer
   /* Marker */
   //= block-control.js
   //= block-controls.js
