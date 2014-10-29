@@ -18,15 +18,15 @@
       var editor = SirTrevor.getInstance(block.getAttribute('data-instance'));
 
       if (this.isActive()) {
-        SirTrevor.TextAndQuote.merge(range, block, blockInner, editor);
+        SirTrevor.BlockTransformers.Quote.merge(range, block, blockInner, editor);
       } else {
-        SirTrevor.TextAndQuote.split(range, block, blockInner, editor);
+        SirTrevor.BlockTransformers.Quote.split(range, block, blockInner, editor);
       }
       SirTrevor.EventBus.trigger("formatbar:hide", editor);
     },
 
     addQuoteBlocks: function(paragraphs, addAt, editor) {
-      return SirTrevor.TextAndQuote.addQuoteBlocks(paragraphs, addAt, editor);
+      return SirTrevor.BlockTransformers.Quote.addQuoteBlocks(paragraphs, addAt, editor);
     },
 
     /**

@@ -1,3 +1,5 @@
+SirTrevor.BlockTransformers = {};
+
 SirTrevor.BlockTransformer = (function() {
 
   var BlockTransformer = function(options) {

@@ -1,6 +1,6 @@
 (function(SirTrevor) {
 
-  var TextAndHeader = SirTrevor.BlockTransformer.extend({
+  var Heading = SirTrevor.BlockTransformer.extend({
 
     split: function(range, block, blockInner, editor) {
       var position = editor.getBlockPosition(block);
@@ -40,6 +40,6 @@
   /*
    Create our formatters and add a static reference to them
    */
-  SirTrevor.TextAndHeader = new TextAndHeader();
+  SirTrevor.BlockTransformers.Heading = new Heading();
 
 }(SirTrevor));

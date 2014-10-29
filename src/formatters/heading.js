@@ -19,15 +19,15 @@
       var editor = SirTrevor.getInstance(block.getAttribute('data-instance'));
 
       if (this.isActive()) {
-        SirTrevor.TextAndHeader.merge(range, block, blockInner, editor);
+        SirTrevor.BlockTransformers.Heading.merge(range, block, blockInner, editor);
       } else {
-        SirTrevor.TextAndHeader.split(range, block, blockInner, editor);
+        SirTrevor.BlockTransformers.Heading.split(range, block, blockInner, editor);
       }
       SirTrevor.EventBus.trigger("formatbar:hide", editor);
     },
 
     addHeadingBlocks: function(paragraphs, addAt, editor) {
-      return SirTrevor.TextAndHeader.addHeadingBlocks(paragraphs, addAt, editor);
+      return SirTrevor.BlockTransformers.Heading.addHeadingBlocks(paragraphs, addAt, editor);
     },
 
     /**

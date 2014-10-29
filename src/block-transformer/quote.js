@@ -1,6 +1,6 @@
 (function(SirTrevor) {
 
-  var TextAndQuote = SirTrevor.BlockTransformer.extend({
+  var Quote = SirTrevor.BlockTransformer.extend({
 
     split: function(range, block, blockInner, editor) {
       var position = editor.getBlockPosition(block);
@@ -46,6 +46,6 @@
   /*
    Create our formatters and add a static reference to them
    */
-  SirTrevor.TextAndQuote = new TextAndQuote();
+  SirTrevor.BlockTransformers.Quote = new Quote();
 
 }(SirTrevor));
