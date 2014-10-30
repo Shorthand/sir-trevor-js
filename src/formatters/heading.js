@@ -18,9 +18,9 @@
       var editor = SirTrevor.getInstance(block.getAttribute('data-instance'));
 
       if (this.isActive()) {
-        SirTrevor.BlockTransformers.Heading.merge(range, block, blockInner, editor);
+        SirTrevor.BlockTransformer.merge(range, block, blockInner, editor);
       } else {
-        SirTrevor.BlockTransformers.Heading.split(range, block, blockInner, editor);
+        SirTrevor.BlockTransformer.split(range, block, blockInner, editor, 'Heading');
       }
 
       SirTrevor.EventBus.trigger("formatbar:hide", editor);
