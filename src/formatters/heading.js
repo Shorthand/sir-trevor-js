@@ -24,10 +24,7 @@
         SirTrevor.BlockTransformers.Heading.split(range, block, blockInner, editor);
       }
       SirTrevor.EventBus.trigger("formatbar:hide", editor);
-    },
 
-    addHeadingBlocks: function(paragraphs, addAt, editor) {
-      return SirTrevor.BlockTransformers.Heading.addHeadingBlocks(paragraphs, addAt, editor);
     },
 
     /**

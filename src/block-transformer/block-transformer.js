@@ -57,14 +57,6 @@ SirTrevor.BlockTransformer = (function() {
       return addAt;
     },
 
-    addHeadingBlocks: function(paragraphs, addAt, editor) {
-      return this._addBlocks(paragraphs, addAt, editor, 'Heading');
-    },
-
-    addQuoteBlocks: function(paragraphs, addAt, editor) {
-      return this._addBlocks(paragraphs, addAt, editor, 'Quote');
-    },
-
     /**
      * Convert an array of block elements into a
      * markdown-like string

@@ -25,10 +25,6 @@
       SirTrevor.EventBus.trigger("formatbar:hide", editor);
     },
 
-    addQuoteBlocks: function(paragraphs, addAt, editor) {
-      return SirTrevor.BlockTransformers.Quote.addQuoteBlocks(paragraphs, addAt, editor);
-    },
-
     /**
      * Sometimes range containers will be text fragments
      * or HTML elements
