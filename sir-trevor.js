@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-29
+ * 2014-10-30
  */
 
 (function ($, _){
@@ -2288,7 +2288,6 @@
       keyCode: 49,
       text: 'H',
   
-  
       onClick: function() {
         var selection = document.getSelection();
         if (selection.type !== 'Range' || selection.rangeCount === 0) {
@@ -2300,15 +2299,12 @@
         var editor = SirTrevor.getInstance(block.getAttribute('data-instance'));
   
         if (this.isActive()) {
-          SirTrevor.TextAndHeader.merge(range, block, blockInner, editor);
+          SirTrevor.BlockTransformer.merge(range, block, blockInner, editor);
         } else {
-          SirTrevor.TextAndHeader.split(range, block, blockInner, editor);
+          SirTrevor.BlockTransformer.split(range, block, blockInner, editor, 'Heading');
         }
-        SirTrevor.EventBus.trigger("formatbar:hide", editor);
-      },
   
-      addHeadingBlocks: function(paragraphs, addAt, editor) {
-        return SirTrevor.TextAndHeader.addHeadingBlocks(paragraphs, addAt, editor);
+        SirTrevor.EventBus.trigger("formatbar:hide", editor);
       },
   
       /**
@@ -2367,15 +2363,11 @@
         var editor = SirTrevor.getInstance(block.getAttribute('data-instance'));
   
         if (this.isActive()) {
-          SirTrevor.TextAndQuote.merge(range, block, blockInner, editor);
+          SirTrevor.BlockTransformer.merge(range, block, blockInner, editor);
         } else {
-          SirTrevor.TextAndQuote.split(range, block, blockInner, editor);
+          SirTrevor.BlockTransformer.split(range, block, blockInner, editor, 'Quote');
         }
         SirTrevor.EventBus.trigger("formatbar:hide", editor);
-      },
-  
-      addQuoteBlocks: function(paragraphs, addAt, editor) {
-        return SirTrevor.TextAndQuote.addQuoteBlocks(paragraphs, addAt, editor);
       },
   
       /**
@@ -2414,14 +2406,16 @@
     SirTrevor.Formatters.Quote = new Quote();
   
   }(SirTrevor, document));
-  // /* Default Reconfigurers */
-  SirTrevor.BlockReconfigurer = (function() {
+  /* Default BlockTransformers */
+  SirTrevor.BlockTransformers = {};
   
-    var Reconfigurer = function(options) {
+  SirTrevor.BlockTransformer = (function() {
+  
+    var BlockTransformer = function(options) {
       this.initialize.apply(this, arguments);
     };
   
-    _.extend(Reconfigurer.prototype, {
+    _.extend(BlockTransformer.prototype, {
   
       WHITESPACE_AND_BR: new RegExp('^(?:\s*<br\s*/?>)*\s*$', 'gim'),
   
@@ -2432,19 +2426,18 @@
       TEXT_BEFORE: -1,
       TEXT_AFTER: 1,
   
-      initialize: function() {
-      },
+      initialize: function() {},
   
       isTextBlock: function(block) {
-        return block.data().type === SirTrevor.Blocks.Text.prototype.type;
+        return block.data('type') === SirTrevor.Blocks.Text.prototype.type;
       },
   
       isHeadingBlock: function(block) {
-        return block.data().type === SirTrevor.Blocks.Heading.prototype.type;
+        return block.data('type') === SirTrevor.Blocks.Heading.prototype.type;
       },
   
       isQuoteBlock: function(block) {
-        return block.data().type === SirTrevor.Blocks.Quote.prototype.type;
+        return block.data('type') === SirTrevor.Blocks.Quote.prototype.type;
       },
   
       isStyledBlock: function(block) {
@@ -2461,7 +2454,7 @@
         });
       },
   
-      _addBlocks: function(paragraphs, addAt, editor, blockType) {
+      addBlocks: function(paragraphs, addAt, editor, blockType) {
         _.each(paragraphs, function(paragraph) {
           // Ignore whitespace and <br> "paragraphs"
           if (paragraph.innerHTML.match(this.WHITESPACE_AND_BR) === null) {
@@ -2471,14 +2464,6 @@
         }, this);
   
         return addAt;
-      },
-  
-      addHeadingBlocks: function(paragraphs, addAt, editor) {
-        return this._addBlocks(paragraphs, addAt, editor, 'Heading');
-      },
-  
-      addQuoteBlocks: function(paragraphs, addAt, editor) {
-        return this._addBlocks(paragraphs, addAt, editor, 'Quote');
       },
   
       /**
@@ -2615,44 +2600,6 @@
           }
           currentBlockPosition++;
         }
-      }
-  
-    });
-  
-    Reconfigurer.extend = extend; // Allow our reconfigurer to be extended.
-  
-    return Reconfigurer;
-  
-  })();
-  (function(SirTrevor) {
-  
-    var TextAndHeader = SirTrevor.BlockReconfigurer.extend({
-  
-      _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
-        // Remove non-editable content before copying
-        firstBlock.find('[contenteditable=false]').remove();
-        secondBlock.find('[contenteditable=false]').remove();
-        var textFromPreviousBlock = this.convertParagraphsToText(firstBlock.find('.st-text-block').children());
-        var textFromNewlyCreatedTextBlock = this.convertParagraphsToText(secondBlock.find('.st-text-block').children());
-  
-        var textForNewBlock = '';
-        if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
-        } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromNewlyCreatedTextBlock;
-        } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
-          textForNewBlock = textFromPreviousBlock;
-        }
-  
-        this.addTextBlock(textForNewBlock, blockPositionToInsert, editor);
-        editor.removeBlock(firstBlock.attr('id'));
-        editor.removeBlock(secondBlock.attr('id'));
-      },
-  
-      _mergeIfTextBlock: function(editor, blockToCheck, firstBlock, secondBlock, blockPosition) {
-        if (this.isTextBlock(blockToCheck)) {
-          this._mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
-        }
       },
   
       merge: function(range, block, blockInner, editor) {
@@ -2660,115 +2607,7 @@
   
         // Remove non-editable content before copying
         $(blockInner).find('[contenteditable=false]').remove();
-        //create a text block from the contents of the exisiting header block
-        this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
-  
-        // remove the old header block
-        editor.removeBlock(block.id);
-  
-        var totalNumberOfBlocks = editor.blocks.length;
-        if (totalNumberOfBlocks === 1) {
-          return;
-        }
-        var newlyCreatedTextBlock = this.getBlockFromPosition(editor, blockPosition);
-        var previousBlock = this.getBlockFromPosition(editor, blockPosition - 1);
-        var nextBlock = this.getBlockFromPosition(editor, blockPosition + 1);
-  
-        if (totalNumberOfBlocks === (blockPosition + 1)) {
-          //merge into the block above
-          this._mergeIfTextBlock(editor, previousBlock, previousBlock, newlyCreatedTextBlock, blockPosition);
-          return;
-        }
-  
-        if (blockPosition === 0) {
-          // if block below is not a a heading then merge into it
-          this._mergeIfTextBlock(editor, nextBlock, newlyCreatedTextBlock, nextBlock, blockPosition);
-        } else {
-          // merge top and bottom blocks
-          this._mergeIfTextBlock(editor, nextBlock, newlyCreatedTextBlock, nextBlock, blockPosition);
-          newlyCreatedTextBlock = this.getBlockFromPosition(editor, blockPosition);
-          this._mergeIfTextBlock(editor, previousBlock, previousBlock, newlyCreatedTextBlock, blockPosition);
-        }
-      },
-  
-      split: function(range, block, blockInner, editor) {
-        var position = editor.getBlockPosition(block);
-        var paragraphsAfterSelection = this.getParagraphsAfterSelection(range, blockInner);
-        var selectedParagraphs = this.getSelectedParagraphs(range, blockInner);
-        var paragraphsBeforeSelection = this.getWholeParagraphsBeforeSelection(range, blockInner);
-  
-        // Remove non-editable content before copying
-        $('[contenteditable=false]', paragraphsAfterSelection).remove();
-        $('[contenteditable=false]', selectedParagraphs).remove();
-  
-        // Remove the headings and paragraphs after from the current text block
-        this.removeParagraphs([].concat(paragraphsAfterSelection, selectedParagraphs));
-  
-        // if paragraphs exist before this new styled block that is going to be added then insert after this paragraph
-        if (paragraphsBeforeSelection.length !== 0){
-          position++;
-        }
-        // Add a new heading block for each paragraph that was selected
-        position = this.addHeadingBlocks(selectedParagraphs, position, editor);
-  
-        if (paragraphsAfterSelection.length !== 0) {
-          var textAfter = this.convertParagraphsToText(paragraphsAfterSelection);
-          if (textAfter) {
-            this.addTextBlock(textAfter, position, editor);
-          }
-        }
-        // Delete original block if it's now empty
-        if (this.isOnlyWhitespaceParagraphs(blockInner.children)) {
-          editor.removeBlock(block.id);
-        }
-        this.ensureNoConsecutiveStyledBlocks(editor);
-        this.ensureLastBlockIsText(editor);
-      }
-    });
-  
-    /*
-     Create our formatters and add a static reference to them
-     */
-    SirTrevor.TextAndHeader = new TextAndHeader();
-  
-  }(SirTrevor));
-  (function(SirTrevor) {
-  
-    var TextAndQuote = SirTrevor.BlockReconfigurer.extend({
-  
-      _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
-        // Remove non-editable content before copying
-        firstBlock.find('[contenteditable=false]').remove();
-        secondBlock.find('[contenteditable=false]').remove();
-        var textFromPreviousBlock = this.convertParagraphsToText(firstBlock.find('.st-text-block').children());
-        var textFromNewlyCreatedTextBlock = this.convertParagraphsToText(secondBlock.find('.st-text-block').children());
-  
-        var textForNewBlock = '';
-        if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
-        } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromNewlyCreatedTextBlock;
-        } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
-          textForNewBlock = textFromPreviousBlock;
-        }
-  
-        this.addTextBlock(textForNewBlock, blockPositionToInsert, editor);
-        editor.removeBlock(firstBlock.attr('id'));
-        editor.removeBlock(secondBlock.attr('id'));
-      },
-  
-      _mergeIfTextBlock: function(editor, blockToCheck, firstBlock, secondBlock, blockPosition) {
-        if (this.isTextBlock(blockToCheck)) {
-          this._mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
-        }
-      },
-  
-      merge: function(range, block, blockInner, editor) {
-        var blockPosition = editor.getBlockPosition(block);
-  
-        // Remove non-editable content before copying
-        $(blockInner).find('[contenteditable=false]').remove();
-        //create a text block from the contents of the exisiting quote block
+        // Create a text block from the contents of the existing quote block
         this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
   
         // remove the old quote block
@@ -2778,12 +2617,13 @@
         if (totalNumberOfBlocks === 1) {
           return;
         }
+  
         var newlyCreatedTextBlock = this.getBlockFromPosition(editor, blockPosition);
         var previousBlock = this.getBlockFromPosition(editor, blockPosition - 1);
         var nextBlock = this.getBlockFromPosition(editor, blockPosition + 1);
   
         if (totalNumberOfBlocks === (blockPosition + 1)) {
-          //merge into the block above
+          // Merge into the block above
           this._mergeIfTextBlock(editor, previousBlock, previousBlock, newlyCreatedTextBlock, blockPosition);
           return;
         }
@@ -2799,7 +2639,34 @@
         }
       },
   
-      split: function(range, block, blockInner, editor) {
+      _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
+        // Remove non-editable content before copying
+        firstBlock.find('[contenteditable=false]').remove();
+        secondBlock.find('[contenteditable=false]').remove();
+        var textFromPreviousBlock = this.convertParagraphsToText(firstBlock.find('.st-text-block').children());
+        var textFromNewlyCreatedTextBlock = this.convertParagraphsToText(secondBlock.find('.st-text-block').children());
+  
+        var textForNewBlock = '';
+        if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
+          textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
+        } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
+          textForNewBlock = textFromNewlyCreatedTextBlock;
+        } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
+          textForNewBlock = textFromPreviousBlock;
+        }
+  
+        this.addTextBlock(textForNewBlock, blockPositionToInsert, editor);
+        editor.removeBlock(firstBlock.attr('id'));
+        editor.removeBlock(secondBlock.attr('id'));
+      },
+  
+      _mergeIfTextBlock: function(editor, blockToCheck, firstBlock, secondBlock, blockPosition) {
+        if (this.isTextBlock(blockToCheck)) {
+          this._mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
+        }
+      },
+  
+      split: function(range, block, blockInner, editor, blockType) {
         var position = editor.getBlockPosition(block);
         var paragraphsAfterSelection = this.getParagraphsAfterSelection(range, blockInner);
         var newQuotes = this.getSelectedParagraphs(range, blockInner);
@@ -2818,7 +2685,7 @@
         }
   
         // Add a new quote block for each paragraph that was selected
-        position = this.addQuoteBlocks(newQuotes, position, editor);
+        position = this.addBlocks(newQuotes, position, editor, blockType);
   
         // Move text after the selection into a new text block,
         // after the quote block(s) we just created
@@ -2840,12 +2707,13 @@
   
     });
   
-    /*
-     Create our formatters and add a static reference to them
-     */
-    SirTrevor.TextAndQuote = new TextAndQuote();
+    BlockTransformer = new BlockTransformer();
   
-  }(SirTrevor));
+    BlockTransformer.extend = extend; // Allow our reconfigurer to be extended.
+  
+    return BlockTransformer;
+  
+  })();
   /* Marker */
   SirTrevor.BlockControl = (function(){
   
