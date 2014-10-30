@@ -7,7 +7,6 @@
     keyCode: 49,
     text: 'H',
 
-
     onClick: function() {
       var selection = document.getSelection();
       if (selection.type !== 'Range' || selection.rangeCount === 0) {
@@ -23,8 +22,8 @@
       } else {
         SirTrevor.BlockTransformers.Heading.split(range, block, blockInner, editor);
       }
-      SirTrevor.EventBus.trigger("formatbar:hide", editor);
 
+      SirTrevor.EventBus.trigger("formatbar:hide", editor);
     },
 
     /**
