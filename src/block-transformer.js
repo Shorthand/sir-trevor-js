@@ -230,7 +230,7 @@ SirTrevor.BlockTransformer = (function() {
       }
     },
 
-    _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
+    mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
       // Remove non-editable content before copying
       firstBlock.find('[contenteditable=false]').remove();
       secondBlock.find('[contenteditable=false]').remove();
@@ -253,7 +253,7 @@ SirTrevor.BlockTransformer = (function() {
 
     _mergeIfTextBlock: function(editor, blockToCheck, firstBlock, secondBlock, blockPosition) {
       if (this.isTextBlock(blockToCheck)) {
-        this._mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
+        this.mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
       }
     },
 
