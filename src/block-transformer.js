@@ -63,14 +63,11 @@ SirTrevor.BlockTransformer = (function() {
      */
     convertParagraphsToText: function(paragraphs) {
       return _.chain(paragraphs)
-          .filter(function(p) {
-            return p.innerHTML.match(this.WHITESPACE_AND_BR) === null;
-          }, this)
           .map(function(p) {
             return p.innerHTML;
           })
           .value() // get filtered array
-          .join('\n\n'); // to string;
+          .join('\n'); // to string;
     },
 
     isOnlyWhitespaceParagraphs: function(paragraphs) {
