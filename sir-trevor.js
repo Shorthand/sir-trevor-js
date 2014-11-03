@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-10-30
+ * 2014-11-03
  */
 
 (function ($, _){
@@ -2639,7 +2639,7 @@
         }
       },
   
-      _mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
+      mergeTextBlocks: function(editor, firstBlock, secondBlock, blockPositionToInsert) {
         // Remove non-editable content before copying
         firstBlock.find('[contenteditable=false]').remove();
         secondBlock.find('[contenteditable=false]').remove();
@@ -2662,7 +2662,7 @@
   
       _mergeIfTextBlock: function(editor, blockToCheck, firstBlock, secondBlock, blockPosition) {
         if (this.isTextBlock(blockToCheck)) {
-          this._mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
+          this.mergeTextBlocks(editor, firstBlock, secondBlock, blockPosition);
         }
       },
   
