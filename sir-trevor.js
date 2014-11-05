@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-11-03
+ * 2014-11-05
  */
 
 (function ($, _){
@@ -2473,7 +2473,11 @@
       convertParagraphsToText: function(paragraphs) {
         return _.chain(paragraphs)
             .map(function(p) {
-              return p.innerHTML;
+              var contents = p.innerHTML;
+              if (contents.match('^<')) {
+                contents = contents.replace(/<DIV>/ig, '').replace(/<\/DIV>/ig, '').replace(/<br>/ig, '');
+              }
+              return contents;
             })
             .value() // get filtered array
             .join('\n'); // to string;
@@ -2645,7 +2649,7 @@
   
         var textForNewBlock = '';
         if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length > 0) {
-          textForNewBlock = textFromPreviousBlock + '\n\n' + textFromNewlyCreatedTextBlock;
+          textForNewBlock = textFromPreviousBlock + '\n' + textFromNewlyCreatedTextBlock;
         } else if (textFromPreviousBlock.length === 0 && textFromNewlyCreatedTextBlock.length > 0) {
           textForNewBlock = textFromNewlyCreatedTextBlock;
         } else if (textFromPreviousBlock.length > 0 && textFromNewlyCreatedTextBlock.length === 0) {
