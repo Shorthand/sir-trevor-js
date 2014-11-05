@@ -41,7 +41,7 @@ describe("Reconfiguring blocks", function() {
       it('should have one text block', function() {
         expect(this.editor.blocks.length).toBe(1);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
-        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('This is a heading!\n\njust text!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('This is a heading!\njust text!');
       });
     });
 
@@ -109,7 +109,7 @@ describe("Reconfiguring blocks", function() {
       it('should have one text block only', function() {
         expect(this.editor.blocks.length).toBe(1);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
-        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('This is a text block!\n\nThis is a heading!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('This is a text block!\nThis is a heading!');
       });
     });
 
@@ -163,7 +163,7 @@ describe("Reconfiguring blocks", function() {
       it('should now have one text block only', function() {
         expect(this.editor.blocks.length).toBe(1);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
-        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('First text block\n\nWas a heading!\n\nSecond text block');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('First text block\nWas a heading!\nSecond text block');
       });
     });
 
@@ -180,7 +180,7 @@ describe("Reconfiguring blocks", function() {
       it('should now have one text block only', function() {
         expect(this.editor.blocks.length).toBe(1);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
-        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('Was a heading!\n\nSecond text block');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('Was a heading!\nSecond text block');
       });
     });
 
@@ -197,7 +197,7 @@ describe("Reconfiguring blocks", function() {
       it('should now have one text block only', function() {
         expect(this.editor.blocks.length).toBe(1);
         expect(BlockUtils.getBlockType(this.editor, 0)).toBe('text');
-        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('First text block\n\nWas a heading!');
+        expect(BlockUtils.getBlockTextFromPosition(this.editor, 0)).toBe('First text block\nWas a heading!');
       });
     });
 
