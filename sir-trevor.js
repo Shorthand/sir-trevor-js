@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2014-11-05
+ * 2015-01-06
  */
 
 (function ($, _){
@@ -1139,6 +1139,27 @@
     return BlockReorder;
   
   })();
+  SirTrevor.BlockDeleteAndMerge = (function(){
+  
+    var BlockDeleteAndMerge = function() {
+      this._ensureElement();
+      this._bindFunctions();
+    };
+  
+    _.extend(BlockDeleteAndMerge.prototype, FunctionBind, Renderable, {
+  
+      tagName: 'a',
+      className: 'delete-and-merge',
+  
+      attributes: {
+        html: '<svg xmlns="http://www.w3.org/2000/svg" class="iconic-x injected-svg iconic iconic-sm iconic-main" width="16" height="16" viewBox="0 0 128 128" data-src="/iconic/svg/x.svg">  <g class="iconic-metadata">    <title>X</title>  </g>  <g data-width="16" data-height="16" class="iconic-x-sm iconic-container iconic-sm" transform="scale(8)">    <path stroke="#000" stroke-width="4" stroke-linecap="square" class="iconic-property-stroke" d="M3 3l10 10m0-10l-10 10" fill="none"></path>  </g></svg>'
+      }
+  
+    });
+  
+    return BlockDeleteAndMerge;
+  
+  })();
   SirTrevor.BlockDeletion = (function(){
   
     var BlockDeletion = function() {
@@ -1542,6 +1563,12 @@
   
         this._blockPrepare();
   
+        if (this.removable) {
+          var blockDeleteAndMerge = new SirTrevor.BlockDeleteAndMerge();
+          this.$inner.append(blockDeleteAndMerge.render().$el);
+          this.$inner.on('click', '.delete-and-merge', this.deleteAndMergeBlocks.bind(this));
+        }
+  
         return this;
       },
   
@@ -1770,6 +1797,37 @@
   
       isEmpty: function() {
         return _.isEmpty(this.saveAndGetData());
+      },
+  
+      deleteAndMergeBlocks: function(e) {
+        e.preventDefault();
+  
+        var editor = SirTrevor.getInstance(this.instanceID), beforeBlock, afterBlock, blockNumber = editor.blocks.length;
+  
+        // Can never be only 1 inline block (there is always a text block added!
+        // if 2 blocks, just remove
+        if (blockNumber === 2) {
+          this.trigger('removeBlock', this.blockID);
+        } else {
+          var block = this.$el[0];
+          var blockPosition = editor.getBlockPosition(block);
+          beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(editor, (blockPosition - 1));
+          afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(editor, (blockPosition + 1));
+  
+          this.trigger('removeBlock', this.blockID);
+  
+          // if blocks before and after are text blocks then merge
+          var beforeBlockIsText = SirTrevor.BlockTransformer.isTextBlock(beforeBlock);
+          var afterBlockIsText = SirTrevor.BlockTransformer.isTextBlock(afterBlock);
+          if (beforeBlockIsText && afterBlockIsText) {
+            SirTrevor.BlockTransformer.mergeTextBlocks(editor, beforeBlock, afterBlock, (blockPosition - 1));
+          } else {
+            if (!beforeBlockIsText && !afterBlockIsText) {
+              // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
+              SirTrevor.BlockTransformer.addTextBlock('', blockPosition, editor);
+            }
+          }
+        }
       }
   
     });
@@ -1863,6 +1921,7 @@
     return SirTrevor.Block.extend({
   
       type: 'Quote',
+      removable: true,
   
       title: function(){ return i18n.t('blocks:quote:title'); },
   
@@ -1890,6 +1949,7 @@
   SirTrevor.Blocks.Heading = SirTrevor.Block.extend({
   
     type: 'Heading',
+    removable: true,
   
     title: function(){ return i18n.t('blocks:heading:title'); },
   

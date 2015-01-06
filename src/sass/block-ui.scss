@@ -32,6 +32,30 @@
   cursor: pointer;
 }
 
+.delete-and-merge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  line-height: 1;
+  border-bottom: none;
+  color: #eeeeee;
+
+  .iconic * {
+    fill: #eeeeee;
+    stroke: #eeeeee;
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: #ec3f3f;
+    
+    .iconic * {
+      fill: #ec3f3f;
+      stroke: #ec3f3f;
+    }
+  }
+}
+
 .st-block-control-ui-btn {
   @extend .st-block-ui-btn;
   width: 2em; height: 1.75em;

@@ -118,6 +118,12 @@ SirTrevor.Block = (function(){
 
       this._blockPrepare();
 
+      if (this.removable) {
+        var blockDeleteAndMerge = new SirTrevor.BlockDeleteAndMerge();
+        this.$inner.append(blockDeleteAndMerge.render().$el);
+        this.$inner.on('click', '.delete-and-merge', this.deleteAndMergeBlocks.bind(this));
+      }
+
       return this;
     },
 
@@ -346,6 +352,37 @@ SirTrevor.Block = (function(){
 
     isEmpty: function() {
       return _.isEmpty(this.saveAndGetData());
+    },
+
+    deleteAndMergeBlocks: function(e) {
+      e.preventDefault();
+
+      var editor = SirTrevor.getInstance(this.instanceID), beforeBlock, afterBlock, blockNumber = editor.blocks.length;
+
+      // Can never be only 1 inline block (there is always a text block added!
+      // if 2 blocks, just remove
+      if (blockNumber === 2) {
+        this.trigger('removeBlock', this.blockID);
+      } else {
+        var block = this.$el[0];
+        var blockPosition = editor.getBlockPosition(block);
+        beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(editor, (blockPosition - 1));
+        afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(editor, (blockPosition + 1));
+
+        this.trigger('removeBlock', this.blockID);
+
+        // if blocks before and after are text blocks then merge
+        var beforeBlockIsText = SirTrevor.BlockTransformer.isTextBlock(beforeBlock);
+        var afterBlockIsText = SirTrevor.BlockTransformer.isTextBlock(afterBlock);
+        if (beforeBlockIsText && afterBlockIsText) {
+          SirTrevor.BlockTransformer.mergeTextBlocks(editor, beforeBlock, afterBlock, (blockPosition - 1));
+        } else {
+          if (!beforeBlockIsText && !afterBlockIsText) {
+            // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
+            SirTrevor.BlockTransformer.addTextBlock('', blockPosition, editor);
+          }
+        }
+      }
     }
 
   });

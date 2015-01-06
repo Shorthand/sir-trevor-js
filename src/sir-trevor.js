@@ -120,6 +120,7 @@
   //= block_mixins
   //= block.positioner.js
   //= block.reorder.js
+  //= block.delete-and-merge.js
   //= block.deletion.js
   //= block.validations.js
   //= block.store.js
