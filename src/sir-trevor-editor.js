@@ -196,6 +196,7 @@ SirTrevor.Editor = (function(){
       this._renderInPosition(block.render().$el, renderAt);
 
       this.listenTo(block, 'removeBlock', this.removeBlock);
+      this.listenTo(block, 'removeAndMergeBlocks', this.removeAndMergeBlocks);
 
       this.blocks.push(block);
       this._incrementBlockTypeCount(type);
@@ -281,7 +282,7 @@ SirTrevor.Editor = (function(){
         if (renderAt >= $blocks.length) {
           this.$wrapper.append(block);
         } else {
-          $blocks.eq(renderAt).before(block);  
+          $blocks.eq(renderAt).before(block);
         }
       } else if (this.block_controls.current_container) {
         this.block_controls.current_container.after(block);
@@ -306,6 +307,34 @@ SirTrevor.Editor = (function(){
 
     _blockLimitReached: function() {
       return (this.options.blockLimit !== 0 && this.blocks.length >= this.options.blockLimit);
+    },
+
+    removeAndMergeBlocks: function(block_id) {
+      // Can never be only 1 inline block (there is always a text block added!
+      // if 2 blocks, just remove
+      if (this.blocks.length === 2) {
+        this.removeBlock(block_id);
+      } else {
+        var block = this.findBlockById(block_id);
+        var blockPosition = this.getBlockPosition(block.$el);
+        // Perhaps mock this
+        beforeBlock = SirTrevor.BlockTransformer
+        .getBlockFromPosition(this, (blockPosition - 1));
+        afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
+        this.removeBlock(block_id);
+
+        // if blocks before and after are text blocks then merge
+        var beforeBlockIsText = SirTrevor.BlockTransformer.isTextBlock(beforeBlock);
+        var afterBlockIsText = SirTrevor.BlockTransformer.isTextBlock(afterBlock);
+        if (beforeBlockIsText && afterBlockIsText) {
+          SirTrevor.BlockTransformer.mergeTextBlocks(this, beforeBlock, afterBlock, (blockPosition - 1));
+        } else {
+          if (!beforeBlockIsText && !afterBlockIsText) {
+            // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
+            SirTrevor.BlockTransformer.addTextBlock('', blockPosition, this);
+          }
+        }
+      }
     },
 
     removeBlock: function(block_id) {
