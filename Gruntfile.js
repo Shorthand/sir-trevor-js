@@ -51,18 +51,6 @@ module.exports = function(grunt) {
       }
     },
 
-    uglify: {
-      options: {
-        mangle: false,
-        banner: banner
-      },
-      standard: {
-        files: {
-          'sir-trevor.min.js': ['sir-trevor.js']
-        }
-      }
-    },
-
     watch: {
       scripts: {
         files: ['src/*.js', 'src/**/*.js', 'src/sass/*.scss'],
@@ -108,7 +96,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('travis', ['rig', 'jasmine']);
 
-  grunt.registerTask('default', ['sass', 'rig', 'uglify', 'jasmine']);
+  grunt.registerTask('default', ['sass', 'rig', 'jasmine']);
 
   grunt.registerTask('jasmine-browser', ['server','watch']);
 
