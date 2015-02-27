@@ -73,9 +73,9 @@ SirTrevor.Editor = (function(){
 
       this._setEvents();
 
-      SirTrevor.EventBus.on(this.ID + ":blocks:change_position", this.changeBlockPosition);
-      SirTrevor.EventBus.on("formatter:position", this.formatBar.renderBySelection);
-      SirTrevor.EventBus.on("formatter:hide", this.formatBar.hide);
+      this.listenTo(SirTrevor.EventBus, this.ID + ":blocks:change_position", this.changeBlockPosition);
+      this.listenTo(SirTrevor.EventBus, "formatter:position", this.formatBar.renderBySelection);
+      this.listenTo(SirTrevor.EventBus, "formatter:hide", this.formatBar.hide);
 
       this.$wrapper.prepend(this.fl_block_controls.render().$el);
       $(document.body).append(this.formatBar.render().$el);
@@ -115,6 +115,8 @@ SirTrevor.Editor = (function(){
       // Stop listening to events
       this.stopListening();
 
+      $(window).off('click', this.hideAllTheThings);
+
       // Cleanup element
       var el = this.$el.detach();
 
@@ -136,7 +138,7 @@ SirTrevor.Editor = (function(){
 
     _setEvents: function() {
       _.each(this.events, function(callback, type) {
-        SirTrevor.EventBus.on(type, this[callback], this);
+        this.listenTo(SirTrevor.EventBus, type, this[callback], this);
       }, this);
     },
 

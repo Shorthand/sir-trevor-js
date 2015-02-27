@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-01-09
+ * 2015-02-27
  */
 
 (function ($, _){
@@ -993,7 +993,7 @@
       this.initialize();
     };
   
-    _.extend(BlockPositioner.prototype, FunctionBind, Renderable, {
+    _.extend(BlockPositioner.prototype, FunctionBind, SirTrevor.Events, Renderable, {
   
       bound: ['onBlockCountChange', 'onSelectChange', 'toggle', 'show', 'hide'],
   
@@ -1006,7 +1006,7 @@
   
         this.$select.on('change', this.onSelectChange);
   
-        SirTrevor.EventBus.on(this.instanceID + ":blocks:count_update", this.onBlockCountChange);
+        this.listenTo(SirTrevor.EventBus, this.instanceID + ":blocks:count_update", this.onBlockCountChange);
       },
   
       onBlockCountChange: function(new_count) {
@@ -2972,7 +2972,7 @@
   
         this.$b = $(document);
         this.$el.bind('click', '.st-format-btn', this.onFormatButtonClick);
-        SirTrevor.EventBus.on("formatbar:hide", this.hide);
+        this.listenTo(SirTrevor.EventBus, "formatbar:hide", this.hide);
       },
   
       hide: function() {
@@ -3110,9 +3110,9 @@
   
         this._setEvents();
   
-        SirTrevor.EventBus.on(this.ID + ":blocks:change_position", this.changeBlockPosition);
-        SirTrevor.EventBus.on("formatter:position", this.formatBar.renderBySelection);
-        SirTrevor.EventBus.on("formatter:hide", this.formatBar.hide);
+        this.listenTo(SirTrevor.EventBus, this.ID + ":blocks:change_position", this.changeBlockPosition);
+        this.listenTo(SirTrevor.EventBus, "formatter:position", this.formatBar.renderBySelection);
+        this.listenTo(SirTrevor.EventBus, "formatter:hide", this.formatBar.hide);
   
         this.$wrapper.prepend(this.fl_block_controls.render().$el);
         $(document.body).append(this.formatBar.render().$el);
@@ -3152,6 +3152,8 @@
         // Stop listening to events
         this.stopListening();
   
+        $(window).off('click', this.hideAllTheThings);
+  
         // Cleanup element
         var el = this.$el.detach();
   
@@ -3173,7 +3175,7 @@
   
       _setEvents: function() {
         _.each(this.events, function(callback, type) {
-          SirTrevor.EventBus.on(type, this[callback], this);
+          this.listenTo(SirTrevor.EventBus, type, this[callback], this);
         }, this);
       },
   

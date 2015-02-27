@@ -18,7 +18,7 @@ SirTrevor.BlockPositioner = (function(){
     this.initialize();
   };
 
-  _.extend(BlockPositioner.prototype, FunctionBind, Renderable, {
+  _.extend(BlockPositioner.prototype, FunctionBind, SirTrevor.Events, Renderable, {
 
     bound: ['onBlockCountChange', 'onSelectChange', 'toggle', 'show', 'hide'],
 
@@ -31,7 +31,7 @@ SirTrevor.BlockPositioner = (function(){
 
       this.$select.on('change', this.onSelectChange);
 
-      SirTrevor.EventBus.on(this.instanceID + ":blocks:count_update", this.onBlockCountChange);
+      this.listenTo(SirTrevor.EventBus, this.instanceID + ":blocks:count_update", this.onBlockCountChange);
     },
 
     onBlockCountChange: function(new_count) {
