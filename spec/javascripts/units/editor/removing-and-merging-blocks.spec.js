@@ -24,18 +24,6 @@ describe("Removing and merging blocks on the Editor", function(){
     expect(this.editor.blocks.length).toBe(4);
   });
 
-  describe("When there is only one block", function() {
-    beforeEach(function() {
-      this.editor = new SirTrevor.Editor({ el: element, defaultType: false });
-      this.editor.createBlock('Heading');
-    });
-
-    it("removes the block and puts a text block there", function() {
-      this.editor.removeAndMergeBlocks(this.editor.blocks[0].blockID);
-      expect(this.editor.blocks.length).toBe(1);
-    });
-  });
-
   describe("When there is only two blocks", function() {
 
     beforeEach(function() {
