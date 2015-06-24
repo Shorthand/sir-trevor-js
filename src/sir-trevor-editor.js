@@ -320,8 +320,7 @@ SirTrevor.Editor = (function(){
         var block = this.findBlockById(block_id);
         var blockPosition = this.getBlockPosition(block.$el);
         // Perhaps mock this
-        beforeBlock = SirTrevor.BlockTransformer
-        .getBlockFromPosition(this, (blockPosition - 1));
+        beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition - 1));
         afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
         this.removeBlock(block_id);
 
