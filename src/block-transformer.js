@@ -199,10 +199,10 @@ SirTrevor.BlockTransformer = (function() {
 
       // Remove non-editable content before copying
       $(blockInner).find('[contenteditable=false]').remove();
-      // Create a text block from the contents of the existing quote block
+      // Create a text block from the contents of the existing block
       this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
 
-      // remove the old quote block
+      // remove the old block
       editor.removeBlock(block.id);
 
       var totalNumberOfBlocks = editor.blocks.length;
