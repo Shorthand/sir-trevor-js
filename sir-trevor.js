@@ -1,10 +1,10 @@
 /*!
- * Sir Trevor JS v0.3.2
+ * Sir Trevor JS v0.3.3
  *
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-02-27
+ * 2015-06-24
  */
 
 (function ($, _){
@@ -2639,10 +2639,10 @@
   
         // Remove non-editable content before copying
         $(blockInner).find('[contenteditable=false]').remove();
-        // Create a text block from the contents of the existing quote block
+        // Create a text block from the contents of the existing block
         this.addTextBlock(blockInner.innerHTML, blockPosition, editor);
   
-        // remove the old quote block
+        // remove the old block
         editor.removeBlock(block.id);
   
         var totalNumberOfBlocks = editor.blocks.length;
@@ -3349,17 +3349,19 @@
       },
   
       removeAndMergeBlocks: function(block_id) {
+        var block = this.findBlockById(block_id);
+        var blockPosition = this.getBlockPosition(block.$el);
+  
         // Can never be only 1 inline block (there is always a text block added!
         // if 2 blocks, just remove
-        if (this.blocks.length === 2) {
+        // Additionally, if it's the first or last block, we can just remove it
+        // (blockPosition+1) is because position is zero-indexed
+        if (this.blocks.length === 2 || blockPosition === 0 || (blockPosition+1) === this.blocks.length) {
           this.removeBlock(block_id);
         } else {
-          var block = this.findBlockById(block_id);
-          var blockPosition = this.getBlockPosition(block.$el);
           // Perhaps mock this
-          beforeBlock = SirTrevor.BlockTransformer
-          .getBlockFromPosition(this, (blockPosition - 1));
-          afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
+          var beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition - 1));
+          var afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
           this.removeBlock(block_id);
   
           // if blocks before and after are text blocks then merge
