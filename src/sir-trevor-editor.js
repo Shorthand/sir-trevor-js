@@ -320,8 +320,8 @@ SirTrevor.Editor = (function(){
         var block = this.findBlockById(block_id);
         var blockPosition = this.getBlockPosition(block.$el);
         // Perhaps mock this
-        beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition - 1));
-        afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
+        var beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition - 1));
+        var afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
         this.removeBlock(block_id);
 
         // if blocks before and after are text blocks then merge
