@@ -312,13 +312,16 @@ SirTrevor.Editor = (function(){
     },
 
     removeAndMergeBlocks: function(block_id) {
+      var block = this.findBlockById(block_id);
+      var blockPosition = this.getBlockPosition(block.$el);
+
       // Can never be only 1 inline block (there is always a text block added!
       // if 2 blocks, just remove
-      if (this.blocks.length === 2) {
+      // Additionally, if it's the first or last block, we can just remove it
+      // (blockPosition+1) is because position is zero-indexed
+      if (this.blocks.length === 2 || blockPosition === 0 || (blockPosition+1) === this.blocks.length) {
         this.removeBlock(block_id);
       } else {
-        var block = this.findBlockById(block_id);
-        var blockPosition = this.getBlockPosition(block.$el);
         // Perhaps mock this
         var beforeBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition - 1));
         var afterBlock = SirTrevor.BlockTransformer.getBlockFromPosition(this, (blockPosition + 1));
