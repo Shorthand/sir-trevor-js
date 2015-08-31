@@ -2470,6 +2470,18 @@
       isQuoteBlock: function(block) {
         return block.data('type') === SirTrevor.Blocks.Quote.prototype.type;
       },
+      
+      isMediaBlock: function(block) {
+        return block.data('type') === SirTrevor.Blocks.Media.prototype.type;
+      },
+
+      isHTMLBlock: function(block) {
+        return block.data('type') === SirTrevor.Blocks.Html.prototype.type;
+      },
+
+      isHTMLorMediaBlock: function(block) {
+        return this.isMediaBlock(block) || this.isHTMLBlock(block);
+      },
   
       isStyledBlock: function(block) {
         return this.isQuoteBlock(block) || this.isHeadingBlock(block);
@@ -3367,12 +3379,18 @@
           // if blocks before and after are text blocks then merge
           var beforeBlockIsText = SirTrevor.BlockTransformer.isTextBlock(beforeBlock);
           var afterBlockIsText = SirTrevor.BlockTransformer.isTextBlock(afterBlock);
+          var beforeBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(afterBlock);
+          var afterBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(afterBlock);
           if (beforeBlockIsText && afterBlockIsText) {
             SirTrevor.BlockTransformer.mergeTextBlocks(this, beforeBlock, afterBlock, (blockPosition - 1));
           } else {
             if (!beforeBlockIsText && !afterBlockIsText) {
-              // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
-              SirTrevor.BlockTransformer.addTextBlock('', blockPosition, this);
+              if (beforeBlockIsHTMLOrMedia && afterBlockIsHTMLOrMedia) {
+                // Two media or HTML blocks, don't create an additional text block
+              } else {
+                // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
+                SirTrevor.BlockTransformer.addTextBlock('', blockPosition, this);
+              }
             }
           }
         }
