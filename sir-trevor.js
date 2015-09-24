@@ -3379,7 +3379,7 @@
           // if blocks before and after are text blocks then merge
           var beforeBlockIsText = SirTrevor.BlockTransformer.isTextBlock(beforeBlock);
           var afterBlockIsText = SirTrevor.BlockTransformer.isTextBlock(afterBlock);
-          var beforeBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(afterBlock);
+          var beforeBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(beforeBlock);
           var afterBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(afterBlock);
           if (beforeBlockIsText && afterBlockIsText) {
             SirTrevor.BlockTransformer.mergeTextBlocks(this, beforeBlock, afterBlock, (blockPosition - 1));
