@@ -51,6 +51,7 @@
       if (selection.rangeCount > 0) {
         var range = selection.getRangeAt(0);
         var block = this._getSelectedBlock(range);
+        // TODO: Potential bug here if selected block is of the same type?
         return block.getAttribute('data-type') === SirTrevor.Blocks.Heading.prototype.type;
       } else {
         return false;
