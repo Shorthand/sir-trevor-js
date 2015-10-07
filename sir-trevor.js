@@ -1,10 +1,10 @@
 /*!
- * Sir Trevor JS v0.3.3
+ * Sir Trevor JS v0.3.5
  *
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-06-24
+ * 2015-10-07
  */
 
 (function ($, _){
@@ -2363,6 +2363,7 @@
         if (selection.rangeCount > 0) {
           var range = selection.getRangeAt(0);
           var block = this._getSelectedBlock(range);
+          // TODO: Potential bug here if selected block is of the same type?
           return block.getAttribute('data-type') === SirTrevor.Blocks.Heading.prototype.type;
         } else {
           return false;
@@ -2448,7 +2449,7 @@
   
     _.extend(BlockTransformer.prototype, {
   
-      WHITESPACE_AND_BR: new RegExp('^(?:\s*<br\s*/?>)*\s*$', 'gim'),
+      WHITESPACE_AND_BR: new RegExp('^(?:\s*<br\s*/?>)*\s*$', 'gi'),
   
       /**
        * These constant are few use with Range.comparePoint
@@ -2469,18 +2470,6 @@
   
       isQuoteBlock: function(block) {
         return block.data('type') === SirTrevor.Blocks.Quote.prototype.type;
-      },
-      
-      isMediaBlock: function(block) {
-        return block.data('type') === SirTrevor.Blocks.Media.prototype.type;
-      },
-
-      isHTMLBlock: function(block) {
-        return block.data('type') === SirTrevor.Blocks.Html.prototype.type;
-      },
-
-      isHTMLorMediaBlock: function(block) {
-        return this.isMediaBlock(block) || this.isHTMLBlock(block);
       },
   
       isStyledBlock: function(block) {
@@ -3379,18 +3368,12 @@
           // if blocks before and after are text blocks then merge
           var beforeBlockIsText = SirTrevor.BlockTransformer.isTextBlock(beforeBlock);
           var afterBlockIsText = SirTrevor.BlockTransformer.isTextBlock(afterBlock);
-          var beforeBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(beforeBlock);
-          var afterBlockIsHTMLOrMedia = SirTrevor.BlockTransformer.isHTMLorMediaBlock(afterBlock);
           if (beforeBlockIsText && afterBlockIsText) {
             SirTrevor.BlockTransformer.mergeTextBlocks(this, beforeBlock, afterBlock, (blockPosition - 1));
           } else {
             if (!beforeBlockIsText && !afterBlockIsText) {
-              if (beforeBlockIsHTMLOrMedia && afterBlockIsHTMLOrMedia) {
-                // Two media or HTML blocks, don't create an additional text block
-              } else {
-                // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
-                SirTrevor.BlockTransformer.addTextBlock('', blockPosition, this);
-              }
+              // You cannot have consecutive styled blocks (heading/quote), but due to a bug, you can have 2 html/media blocks TODO: Fix this bug
+              SirTrevor.BlockTransformer.addTextBlock('', blockPosition, this);
             }
           }
         }
