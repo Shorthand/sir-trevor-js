@@ -8,7 +8,7 @@ SirTrevor.BlockTransformer = (function() {
 
   _.extend(BlockTransformer.prototype, {
 
-    WHITESPACE_AND_BR: new RegExp('^(?:\s*<br\s*/?>)*\s*$', 'gim'),
+    WHITESPACE_AND_BR: new RegExp('^(?:\s*<br\s*/?>)*\s*$', 'gi'),
 
     /**
      * These constant are few use with Range.comparePoint
